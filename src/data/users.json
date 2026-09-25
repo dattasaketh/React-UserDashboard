@@ -1,0 +1,132 @@
+[
+  {
+    "id": 1,
+    "name": "Aarav Sharma",
+    "username": "aarav.sharma",
+    "email": "aarav.sharma@company.com",
+    "role": "Product Manager",
+    "department": "Product",
+    "status": "active",
+    "lastActive": "2026-09-13T15:42:00.000Z"
+  },
+  {
+    "id": 2,
+    "name": "Rohan Mehta",
+    "username": "rohan.mehta",
+    "email": "rohan.mehta@company.com",
+    "role": "Backend Developer",
+    "department": "Engineering",
+    "status": "active",
+    "lastActive": "2026-09-12T09:18:00.000Z"
+  },
+  {
+    "id": 3,
+    "name": "Ananya Reddy",
+    "username": "ananya.reddy",
+    "email": "ananya.reddy@company.com",
+    "role": "Product Designer",
+    "department": "Design",
+    "status": "active",
+    "lastActive": "2026-09-13T11:05:00.000Z"
+  },
+  {
+    "id": 4,
+    "name": "Vikram Singh",
+    "username": "vikram.singh",
+    "email": "vikram.singh@company.com",
+    "role": "DevOps Engineer",
+    "department": "Engineering",
+    "status": "inactive",
+    "lastActive": "2026-08-28T17:30:00.000Z"
+  },
+  {
+    "id": 5,
+    "name": "Priya Nair",
+    "username": "priya.nair",
+    "email": "priya.nair@company.com",
+    "role": "Data Analyst",
+    "department": "Analytics",
+    "status": "active",
+    "lastActive": "2026-09-13T08:22:00.000Z"
+  },
+  {
+    "id": 6,
+    "name": "Arjun Kapoor",
+    "username": "arjun.kapoor",
+    "email": "arjun.kapoor@company.com",
+    "role": "Security Specialist",
+    "department": "Engineering",
+    "status": "inactive",
+    "lastActive": "2026-08-14T13:47:00.000Z"
+  },
+  {
+    "id": 7,
+    "name": "Sneha Patel",
+    "username": "sneha.patel",
+    "email": "sneha.patel@company.com",
+    "role": "Customer Success Lead",
+    "department": "Support",
+    "status": "active",
+    "lastActive": "2026-09-12T16:59:00.000Z"
+  },
+  {
+    "id": 8,
+    "name": "Karthik Iyer",
+    "username": "karthik.iyer",
+    "email": "karthik.iyer@company.com",
+    "role": "Frontend Developer",
+    "department": "Engineering",
+    "status": "active",
+    "lastActive": "2026-09-13T14:11:00.000Z"
+  },
+  {
+    "id": 9,
+    "name": "Meera Joshi",
+    "username": "meera.joshi",
+    "email": "meera.joshi@company.com",
+    "role": "Marketing Lead",
+    "department": "Marketing",
+    "status": "inactive",
+    "lastActive": "2026-09-02T10:36:00.000Z"
+  },
+  {
+    "id": 10,
+    "name": "Aditya Verma",
+    "username": "aditya.verma",
+    "email": "aditya.verma@company.com",
+    "role": "Sales Representative",
+    "department": "Sales",
+    "status": "active",
+    "lastActive": "2026-09-11T12:48:00.000Z"
+  },
+  {
+    "id": 11,
+    "name": "Pooja Deshmukh",
+    "username": "pooja.deshmukh",
+    "email": "pooja.deshmukh@company.com",
+    "role": "UX Designer",
+    "department": "Design",
+    "status": "active",
+    "lastActive": "2026-09-10T09:54:00.000Z"
+  },
+  {
+    "id": 12,
+    "name": "Rahul Choudhary",
+    "username": "rahul.choudhary",
+    "email": "rahul.choudhary@company.com",
+    "role": "QA Engineer",
+    "department": "Engineering",
+    "status": "inactive",
+    "lastActive": "2026-07-30T15:03:00.000Z"
+  },
+  {
+    "id": 13,
+    "name": "Isha Kapoor",
+    "username": "isha.kapoor",
+    "email": "isha.kapoor@company.com",
+    "role": "Content Writer",
+    "department": "Marketing",
+    "status": "active",
+    "lastActive": "2026-09-12T11:27:00.000Z"
+  }
+]
