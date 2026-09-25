@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useUsers } from './hooks/useUsers'
 import { useDebouncedValue } from './hooks/useDebouncedValue'
 import { useToasts } from './hooks/useToasts'
@@ -25,6 +25,13 @@ export default function App() {
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const debouncedSearch = useDebouncedValue(search, 250)
+  const [currentPage, setCurrentPage] = useState(1)
+const usersPerPage = 5
+
+const [sortConfig, setSortConfig] = useState({
+  key: 'name',
+  direction: 'asc',
+})
 
   const [modalState, setModalState] = useState(null) // null | { mode: 'create' } | { mode: 'edit', user }
   const [pendingDelete, setPendingDelete] = useState(null) // user | null
@@ -45,6 +52,49 @@ export default function App() {
   }, [users, debouncedSearch, statusFilter])
 
   const isFiltering = Boolean(debouncedSearch.trim()) || statusFilter !== 'all'
+
+const totalPages = Math.ceil(visibleUsers.length / usersPerPage)
+
+const sortedUsers = useMemo(() => {
+  return [...visibleUsers].sort((a, b) => {
+    const first = String(a[sortConfig.key] ?? '').toLowerCase()
+    const second = String(b[sortConfig.key] ?? '').toLowerCase()
+
+    if (first < second) {
+      return sortConfig.direction === 'asc' ? -1 : 1
+    }
+
+    if (first > second) {
+      return sortConfig.direction === 'asc' ? 1 : -1
+    }
+
+    return 0
+  })
+}, [visibleUsers, sortConfig])
+
+const paginatedUsers = useMemo(() => {
+  const startIndex = (currentPage - 1) * usersPerPage
+
+  return sortedUsers.slice(
+    startIndex,
+    startIndex + usersPerPage
+  )
+}, [sortedUsers, currentPage])
+  useEffect(() => {
+  setCurrentPage(1)
+  }, [debouncedSearch, statusFilter])
+
+  const handleSort = (key) => {
+  setSortConfig((current) => ({
+    key,
+    direction:
+      current.key === key && current.direction === 'asc'
+        ? 'desc'
+        : 'asc',
+  }))
+
+  setCurrentPage(1)
+}
 
   const handleSubmit = async (formValues) => {
     const { values, errors } = validate(UserSchema, userFromForm(formValues))
@@ -79,7 +129,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <Header activeCount={users.filter((user) => user.status === 'active').length} />
+     <Header totalCount={users.length} />
 
       <main className="page">
         <Toolbar
@@ -107,16 +157,76 @@ export default function App() {
 
           {!isLoading && !error && visibleUsers.length > 0 && (
             <>
-              <UserTable
-                users={visibleUsers}
-                onEdit={(user) => setModalState({ mode: 'edit', user })}
-                onDelete={setPendingDelete}
+   <UserTable
+  users={paginatedUsers}
+  onEdit={(user) => setModalState({ mode: 'edit', user })}
+  onDelete={setPendingDelete}
+  onSort={handleSort}
+  sortConfig={sortConfig}
+/>
+
+<UserCards
+  users={paginatedUsers}
+  onEdit={(user) => setModalState({ mode: 'edit', user })}
+  onDelete={setPendingDelete}
               />
-              <UserCards
-                users={visibleUsers}
-                onEdit={(user) => setModalState({ mode: 'edit', user })}
-                onDelete={setPendingDelete}
-              />
+              {totalPages > 1 && (
+  <div className="pagination" aria-label="User pagination">
+    <div className="pagination-info">
+      Showing{' '}
+      <strong>
+        {(currentPage - 1) * usersPerPage + 1}
+      </strong>
+      {'–'}
+      <strong>
+        {Math.min(currentPage * usersPerPage, visibleUsers.length)}
+      </strong>
+      {' '}of{' '}
+      <strong>{visibleUsers.length}</strong>
+      {' '}users
+    </div>
+
+    <div className="pagination-controls">
+      <button
+        type="button"
+        className="pagination-button"
+        onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))}
+        disabled={currentPage === 1}
+        aria-label="Go to previous page"
+      >
+        ←
+      </button>
+
+      {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+        (page) => (
+          <button
+            key={page}
+            type="button"
+            className={`pagination-button ${
+              currentPage === page ? 'active' : ''
+            }`}
+            onClick={() => setCurrentPage(page)}
+            aria-current={currentPage === page ? 'page' : undefined}
+          >
+            {page}
+          </button>
+        )
+      )}
+
+      <button
+        type="button"
+        className="pagination-button"
+        onClick={() =>
+          setCurrentPage((page) => Math.min(page + 1, totalPages))
+        }
+        disabled={currentPage === totalPages}
+        aria-label="Go to next page"
+      >
+        →
+      </button>
+    </div>
+                </div>
+              )}
             </>
           )}
         </section>

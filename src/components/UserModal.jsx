@@ -1,5 +1,13 @@
 import Modal from './Modal'
-import { emptyUserFrom, DEPARTMENTS, ROLES, STATUSES } from '../utils/validation'
+import {
+  emptyUserFrom,
+  DEPARTMENTS,
+  ROLES,
+  STATUSES,
+  UserSchema,
+  userFromForm,
+  validate,
+} from '../utils/validation'
 import { useState } from 'react'
 
 const BLANK = emptyUserFrom()
@@ -19,13 +27,39 @@ export default function UserModal({ mode, user, onSubmit, onClose }) {
   const isEdit = mode === 'edit'
   const [values, setValues] = useState(() => (isEdit ? userToForm(user) : { ...BLANK }))
   const [errors, setErrors] = useState([])
-  const [isSubmitting, setIsSubmitting] = useState(false)
+const [touched, setTouched] = useState({})
+const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const setField = (field) => (event) => {
-    const value = event.target.value
-    setValues((current) => ({ ...current, [field]: value }))
-    setErrors((current) => current.filter((issue) => issue.field !== field))
-  }
+const setField = (field) => (event) => {
+  const value = event.target.value
+
+  setValues((current) => ({ ...current, [field]: value }))
+
+  setErrors((current) => current.filter((issue) => issue.field !== field))
+}
+
+const validateField = (field, value) => {
+  const normalizedValues = userFromForm({
+    ...values,
+    [field]: value,
+  })
+
+  const { errors: validationErrors } = validate(UserSchema, normalizedValues)
+  const message = validationErrors[field]
+
+  setErrors((current) => {
+    const withoutCurrentField = current.filter((issue) => issue.field !== field)
+
+    if (!message) return withoutCurrentField
+
+    return [...withoutCurrentField, { field, message }]
+  })
+}
+
+const handleBlur = (field) => () => {
+  setTouched((current) => ({ ...current, [field]: true }))
+  validateField(field, values[field])
+}
 
   const errorFor = (field) => errors.find((issue) => issue.field === field)?.message
 
@@ -53,6 +87,7 @@ export default function UserModal({ mode, user, onSubmit, onClose }) {
               type="text"
               value={values.name}
               onChange={setField('name')}
+              onBlur={handleBlur('name')}
               placeholder="e.g. Maria Garcia"
               autoComplete="off"
               aria-invalid={Boolean(errorFor('name'))}
@@ -68,6 +103,7 @@ export default function UserModal({ mode, user, onSubmit, onClose }) {
               type="text"
               value={values.username}
               onChange={setField('username')}
+onBlur={handleBlur('username')}
               placeholder="e.g. maria.garcia"
               autoComplete="off"
               aria-invalid={Boolean(errorFor('username'))}
@@ -83,6 +119,7 @@ export default function UserModal({ mode, user, onSubmit, onClose }) {
               type="email"
               value={values.email}
               onChange={setField('email')}
+onBlur={handleBlur('email')}
               placeholder="e.g. maria@company.com"
               autoComplete="off"
               aria-invalid={Boolean(errorFor('email'))}
@@ -97,6 +134,7 @@ export default function UserModal({ mode, user, onSubmit, onClose }) {
               className={fieldClass('role')}
               value={values.role}
               onChange={setField('role')}
+              onBlur={handleBlur('role')}
               aria-invalid={Boolean(errorFor('role'))}
             >
               <option value="" disabled>
@@ -118,6 +156,7 @@ export default function UserModal({ mode, user, onSubmit, onClose }) {
               className={fieldClass('department')}
               value={values.department}
               onChange={setField('department')}
+onBlur={handleBlur('department')}
               aria-invalid={Boolean(errorFor('department'))}
             >
               <option value="" disabled>
@@ -145,6 +184,7 @@ export default function UserModal({ mode, user, onSubmit, onClose }) {
                     value={status.value}
                     checked={values.status === status.value}
                     onChange={setField('status')}
+                    onBlur={handleBlur('status')}
                   />
                   <span className="status-dot" aria-hidden="true" />
                   {status.label}
