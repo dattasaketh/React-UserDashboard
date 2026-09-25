@@ -1,15 +1,77 @@
 import UserRow from './UserRow'
 
-export default function UserTable({ users, onEdit, onDelete }) {
+export default function UserTable({
+  users,
+  onEdit,
+  onDelete,
+  onSort,
+  sortConfig,
+}) {
   return (
     <div className="table-scroll">
       <table className="user-table">
         <thead>
           <tr>
-            <th scope="col">User</th>
-            <th scope="col">Role</th>
-            <th scope="col">Status</th>
-            <th scope="col">Last active</th>
+            <th scope="col">
+              <button
+                type="button"
+                className="table-sort-button"
+                onClick={() => onSort('name')}
+              >
+                User
+                {sortConfig.key === 'name' && (
+                  <span aria-hidden="true">
+                    {sortConfig.direction === 'asc' ? ' ↑' : ' ↓'}
+                  </span>
+                )}
+              </button>
+            </th>
+
+            <th scope="col">
+              <button
+                type="button"
+                className="table-sort-button"
+                onClick={() => onSort('role')}
+              >
+                Role
+                {sortConfig.key === 'role' && (
+                  <span aria-hidden="true">
+                    {sortConfig.direction === 'asc' ? ' ↑' : ' ↓'}
+                  </span>
+                )}
+              </button>
+            </th>
+
+            <th scope="col">
+              <button
+                type="button"
+                className="table-sort-button"
+                onClick={() => onSort('status')}
+              >
+                Status
+                {sortConfig.key === 'status' && (
+                  <span aria-hidden="true">
+                    {sortConfig.direction === 'asc' ? ' ↑' : ' ↓'}
+                  </span>
+                )}
+              </button>
+            </th>
+
+            <th scope="col">
+              <button
+                type="button"
+                className="table-sort-button"
+                onClick={() => onSort('lastActive')}
+              >
+                Last active
+                {sortConfig.key === 'lastActive' && (
+                  <span aria-hidden="true">
+                    {sortConfig.direction === 'asc' ? ' ↑' : ' ↓'}
+                  </span>
+                )}
+              </button>
+            </th>
+
             <th scope="col">
               <span className="visually-hidden">Actions</span>
             </th>
